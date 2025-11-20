@@ -11,7 +11,7 @@ const Filter = ({currentFilter, onFilterChange, todosCount, activeTodosCount}) =
         <div className="filters">
             {filters.map(filter => (
                 <button 
-                key={filters.key}
+                key={filter.key}
                 className={currentFilter === filters.key ? 'filter-btn active' : 'filter-btn'}
                 onClick={onFilterChange}
                 >

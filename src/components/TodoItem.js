@@ -1,6 +1,6 @@
 import React, {useState} from "react";
 
-const TodoItem = ({todo, ontoggle, onDelete, onEdit}) => {
+const TodoItem = ({todo, onToggle, onDelete, onEdit}) => {
     const [isEditing, setIsEditing] = useState(false);
     const [editText, setEditText] = useState(todo.text);
 
@@ -26,7 +26,7 @@ const TodoItem = ({todo, ontoggle, onDelete, onEdit}) => {
                 <input
                 type="checkbox"
                 checked={todo.completed}
-                onChange={() => ontoggle(todo.id)}
+                onChange={() => onToggle(todo.id)}
                 className="checkbox"
                 />
 

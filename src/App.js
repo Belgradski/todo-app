@@ -1,4 +1,8 @@
 import React, { useState, useEffect } from "react";
+import TodoForm from "./components/TodoForm";
+import TodoList from "./components/TodoList";
+import Filter from "./components/Filter";
+import "./App.css"
 
 
 function App() {
@@ -15,7 +19,7 @@ function App() {
 
   //сохранение в localStorage
   useEffect(() => {
-    localStorage.setItem(JSON.stringify(todos))
+    localStorage.setItem('todos',JSON.stringify(todos))
   }, [todos]);
 
   const addTodo = (text) => {
