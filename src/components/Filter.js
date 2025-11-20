@@ -2,9 +2,9 @@ import React from "react";
 
 const Filter = ({currentFilter, onFilterChange, todosCount, activeTodosCount}) => {
     const filters = [
-        {key: 'all', label: 'All', count: todosCount},
-        {key: 'active', label: 'Active', count: activeTodosCount},
-        {key: 'completed', label: 'Completed', count: todosCount - activeTodosCount},
+        {key: 'all', label: 'Все', count: todosCount},
+        {key: 'active', label: 'Активные', count: activeTodosCount},
+        {key: 'completed', label: 'Выполненые', count: todosCount - activeTodosCount},
     ];
 
     return (

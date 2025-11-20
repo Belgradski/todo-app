@@ -31,14 +31,15 @@ const TodoItem = ({todo, onToggle, onDelete, onEdit}) => {
                 />
 
                 {isEditing ? (
-                    <input 
+                    <textarea 
                     type="text"
                     value={editText}
                     onChange={(e) => setEditText(e.target.value)}
                     onBlur={handleEdit}
                     onKeyDown={handleKeyDown}
-                    className="edit-input"
+                    className="edit-textarea"
                     autoFocus
+                    row={3}
                     />
                 ) : (
                     <span className="todo-text"
