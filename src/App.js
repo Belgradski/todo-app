@@ -6,16 +6,11 @@ import "./App.css"
 
 
 function App() {
-  const [todos, setTodos] = useState([]);
+  const [todos, setTodos] = useState(() => {
+    const savedtodos = localStorage.getItem('todos');
+    return savedtodos ? JSON.parse(savedtodos) : [];
+  });
   const [filter, setFilter] = useState('all');
-
-  //Загрузка из localStorage
-  useEffect(() => {
-    const saveTodos = localStorage.getItem('todos');
-    if (saveTodos) {
-      setTodos(JSON.parse(saveTodos));
-    }
-  }, []);
 
   //сохранение в localStorage
   useEffect(() => {

@@ -165,7 +165,10 @@ body {
   border: 1px solid #667eea;
   border-radius: 4px;
   font-size: 16px;
-  justify-content: center;
+  resize: vertical;
+  min-height: 40px;
+  max-height: 120px;
+  line-height: 1.4;
 }
 
 .todo-actions {
