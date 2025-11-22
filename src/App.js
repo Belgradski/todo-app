@@ -11,11 +11,25 @@ function App() {
     return savedtodos ? JSON.parse(savedtodos) : [];
   });
   const [filter, setFilter] = useState('all');
+  const [darkMode, setDarkMode] = useState(() => {
+    const savedTheme = localStorage.getItem('darkMode');
+    return savedTheme ? JSON.parse(savedTheme) : false;
+  });
 
-  //сохранение в localStorage
+  //сохранение тудух в localStorage
   useEffect(() => {
     localStorage.setItem('todos',JSON.stringify(todos))
   }, [todos]);
+
+  //сохранение темной темы в localStorage
+  useEffect(() => {
+    localStorage.setItem('darkMode', JSON.stringify(darkMode));
+    if (darkMode) {
+      document.body.classList.add('dark-theme');
+    } else {
+      document.body.classList.remove('dark-theme')
+    }
+  }, [darkMode]);
 
   const addTodo = (text) => {
     if (text.trim() !== '') {
@@ -58,20 +72,32 @@ function App() {
         return todos;
     }
   }
+
+  const toggleDarkMode = () => {
+    setDarkMode(!darkMode);
+  }
+
   const activeTodosCount = todos.filter(todo => !todo.completed).length;
 
   return (
-    <div className="app">
+    <div className={`app ${darkMode ? 'dark' : ''}`}>
       <div className="container">
         <header className="header">
+          <div className="header-top">
           <h1>My Todo List</h1>
+          <button onClick={toggleDarkMode} className="theme-toggle-btn"
+          aria-label={darkMode ? 'Переключить на светлую тему' : 'Переключить на тёмную тему'}
+          >
+            {darkMode ? '☀️' : '🌙'}
+          </button>
+          </div>
           <p>{activeTodosCount} активных задач</p>
         </header>
 
       <TodoForm onAdd={addTodo} />
 
       <Filter 
-        currentFIlter={filter}
+        currentFilter={filter}
         onFilterChange={setFilter}
         todosCount={todos.length}
         activeTodosCount={activeTodosCount}

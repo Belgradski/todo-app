@@ -12,7 +12,7 @@ const Filter = ({currentFilter, onFilterChange, todosCount, activeTodosCount}) =
             {filters.map(filter => (
                 <button 
                 key={filter.key}
-                className={currentFilter === filters.key ? 'filter-btn active' : 'filter-btn'}
+                className={currentFilter === filter.key ? 'filter-btn active' : 'filter-btn'}
                 onClick={onFilterChange}
                 >
                 {filter.label} ({filter.count})

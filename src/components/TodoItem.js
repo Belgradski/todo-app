@@ -14,10 +14,7 @@ const TodoItem = ({ todo, onToggle, onDelete, onEdit }) => {
   const handleKeyDown = (e) => {
     if (e.key === "Enter") {
       handleEdit();
-    } else if (e.key === "Escape") {
-      setEditText(todo.text);
-      setIsEditing(false);
-    }
+    } 
   };
 
   return (
