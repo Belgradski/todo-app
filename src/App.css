@@ -246,16 +246,12 @@ body.dark-theme {
   border-radius: 4px;
   cursor: pointer;
   font-size: 14px;
+  background: transparent;
   transition: background 0.3s;
 }
 
-.delete-btn {
-  background: #dc3545;
-  color: white;
-}
-
 .delete-btn:hover {
-  background: #c82333;
+  background: var(--primary-hover);
 }
 
 .clear-btn {
