@@ -17,6 +17,9 @@ const TodoItem = ({ todo, onToggle, onDelete, onEdit }) => {
     } 
   };
 
+  const handleDoubleClick = () => {
+    setIsEditing(true);
+  }
   return (
     <div className={`todo-item ${todo.completed ? "completed" : ""}`}>
       <div className="todo-content">
@@ -39,9 +42,9 @@ const TodoItem = ({ todo, onToggle, onDelete, onEdit }) => {
             row={3}
           />
         ) : (
-          <span className="todo-text" onDoubleClick={setIsEditing(true)}>
+          <div className="todo-text" onDoubleClick={handleDoubleClick}>
             {todo.text}
-          </span>
+          </div>
         )}
 
         <span className="todo-date">{todo.createAt}</span>

@@ -13,7 +13,7 @@ const Filter = ({currentFilter, onFilterChange, todosCount, activeTodosCount}) =
                 <button 
                 key={filter.key}
                 className={currentFilter === filter.key ? 'filter-btn active' : 'filter-btn'}
-                onClick={onFilterChange}
+                onClick={() => onFilterChange(filter.key)}
                 >
                 {filter.label} ({filter.count})
                 </button>
