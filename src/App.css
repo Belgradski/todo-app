@@ -31,7 +31,7 @@
 }
 
 body {
-  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
   background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
   min-height: 100vh;
   padding: 20px;
@@ -174,6 +174,7 @@ body.dark-theme {
 .todo-item {
   display: flex;
   justify-content: space-between;
+  width: 100%;
   align-items: center;
   padding: 15px;
   border: 1px solid var(--border-color);
@@ -182,10 +183,13 @@ body.dark-theme {
   transition: all 0.3s;
   gap: 10px;
   background: var(--bg-color);
+  cursor: pointer;
+  transition: transform 0.2s, box-shadow 0.2s;
 }
 
 .todo-item:hover {
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+  transform: translateY(-2px);
 }
 
 .todo-item.completed {
@@ -194,10 +198,15 @@ body.dark-theme {
 }
 
 .todo-content {
-  display: flex;
+  display: grid;
   align-items: center;
-  flex: 1;
+  grid-template-columns: min-content 1fr min-content;
+  width: 100%;
   gap: 15px;
+}
+
+.todo-checkbox-container {
+  flex-shrink: 0;
 }
 
 .checkbox {
@@ -207,9 +216,10 @@ body.dark-theme {
 }
 
 .todo-text {
-  flex: 1;
+  
+  width: 90%;
   font-size: 16px;
-  color: var(--text-color)
+  color: var(--text-color);
 }
 
 .todo-item.completed .todo-text {
@@ -239,20 +249,22 @@ body.dark-theme {
 .todo-actions {
   display: flex;
   gap: 5px;
+  flex-shrink: 0;
 }
 
-.edit-btn, .delete-btn {
+.delete-btn {
   padding: 8px 12px;
   border: none;
   border-radius: 4px;
   cursor: pointer;
   font-size: 14px;
   background: transparent;
-  transition: background 0.3s;
+  transition: all 0.3s;
 }
 
 .delete-btn:hover {
   background: var(--primary-hover);
+  font-size: 16px;
 }
 
 .clear-btn {
@@ -271,28 +283,435 @@ body.dark-theme {
   background: #5a6268;
 }
 
-@media (max-width: 768px) {
-  .container {
-    padding: 20px;
-    margin: 10px;
+/*стили для сроков выполнения */
+.date-input-container {
+  display: flex;
+  gap: 5px;
+  min-width: 200px;
+}
+
+.date-input {
+  flex: 1;
+  padding: 15px;
+  border: 2px solid var(--border-color);
+  border-radius: 8px;
+  font-size: 16px;
+  background: var(--bg-color);
+  color: var(--text-color);
+  cursor: pointer;
+}
+
+.date-input:focus-visible {
+  outline: none;
+  border-color: var(--primary-color);
+}
+
+.tomorrow-btn {
+  padding: 15px;
+  background: var(--border-color);
+  color: var(--text-color);
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: all 0.3s;
+}
+
+.tomorrow-btn:hover {
+  background: var(--primary-hover);
+  color: white;
+}
+
+.todo-item.overdue {
+  border-left: 4px solid #f44336;
+  background: rgba(244, 67, 54, 0.05);
+}
+
+.todo-meta {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  margin-top: 8px;
+  font-size: 12px;
+}
+
+.due-date {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 3px 8px;
+  border-radius: 12px;
+  background: rgba(76, 175, 80, 0.1);
+  color: #4caf50;
+  font-size: 11px;
+  cursor: pointer;
+  transition: all 0.3s;
+  max-width: fit-content;
+}
+
+.due-date:hover {
+  background: rgba(76, 175, 80, 0.2);
+  transform: scale(1.05);
+}
+
+.due-date.overdue {
+  background: rgba(244, 67, 54, 0.1);
+  color: #f44336;
+  font-weight: bold;
+}
+
+.due-date.overdue:hover {
+  background: rgba(244, 67, 54, 0.2);
+}
+
+.due-date-icon {
+  font-size: 10px;
+}
+
+.overdue-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 16px;
+  height: 16px;
+  background: #f44336;
+  color: white;
+  border-radius: 50%;
+  font-size: 10px;
+  font-weight: bold;
+  margin-left: 3px;
+}
+
+.edit-container {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.date-edit-container {
+  display: flex;
+  gap: 5px;
+}
+
+.date-edit-input {
+  flex: 1;
+  padding: 8px;
+  border: 1px solid var(--border-color);
+  border-radius: 4px;
+  font-size: 14px;
+  background: var(--bg-color);
+  color: var(--text-color);
+  width: 100%;
+}
+
+.clear-date-btn {
+  padding: 8px 12px;
+  background: var(--border-color);
+  color: var(--text-color);
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  min-width: 40px;
+}
+
+.clear-data-btn:hover {
+  background: #f44336;
+  color: white;
+}
+
+.date-quick-edit {
+  position: absolute;
+  top: 50%;
+  right: 60px;
+  transform: translateY(-50%);
+  z-index: 10;
+  background: var(--bg-color);
+  padding: 5px;
+  border-radius: 4px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+}
+
+/* Стили для модалки редактирования  */
+
+.edit-modal-overlay {
+  position: fixed;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  background: rgba(0, 0, 0, 0.7);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 9999;
+  padding: 20px;
+  animation: fadeIn 0.2s ease;
+  backdrop-filter: blur(5px);
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
   }
-  
+  to {
+    opacity: 1;
+  }
+}
+
+.edit-modal {
+  background: var(--bg-color);
+  padding: 0;
+  border-radius: 16px;
+  width: 100%;
+  max-width: 500px;
+  max-height: 90vh;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+  transition: all 0.3s;
+  display: flex;
+  overflow: hidden;
+  flex-direction: column;
+}
+
+.edit-modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 20px 25px;
+  border-bottom: 1px solid var(--border-color);
+}
+
+.edit-modal-header h3 {
+  color: var(--text-color);
+  font-size: 1.4rem;
+  margin: 0;
+}
+
+.close-modal-btn {
+  background: none;
+  border: none;
+  font-size: 28px;
+  color: var(--text-secondary);
+  cursor: pointer;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  transition: all 0.3s;
+}
+
+.close-modal-btn:hover {
+  background: var(--completed-bg);
+  color: var(--text-color);
+}
+
+.edit-form {
+  padding: 25px;
+}
+
+.form-group {
+  margin-bottom: 25px;
+}
+
+.form-group label {
+  display: block;
+  margin-bottom: 8px;
+  color: var(--text-color);
+  font-weight: 500;
+}
+
+.edit-textarea-modal {
+  width: 100%;
+  padding: 15px;
+  border: 2px solid var(--border-color);
+  border-radius: 8px;
+  font-size: 16px;
+  line-height: 1.5;
+  color: var(--text-color);
+  background: var(--bg-color);
+  resize: vertical;
+  min-height: 100px;
+  max-height: 300px;
+  transition: border-color 0.3s;
+  font-family: inherit;
+}
+
+.edit-textarea-modal:focus {
+  outline: none;
+  border-color: var(--primary-color);
+}
+
+.quick-date-options {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+}
+
+@media (min-width: 480px) {
+  .quick-date-options {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+.quick-date-btn {
+  padding: 12px 10px;
+  border: 2px solid var(--border-color);
+  border-radius: 8px;
+  background: var(--bg-color);
+  color: var(--text-color);
+  cursor: pointer;
+  transition: all 0.3s;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 5px;
+  font-size: 0.9rem;
+}
+
+.quick-date-btn:hover {
+  border-color: var(--primary-color);
+  transform: translateY(-2px);
+}
+
+.quick-date-btn.active {
+  background: var(--primary-color);
+  border-color: var(--primary-color);
+  color: white;
+}
+
+.date-icon {
+  font-size: 1.1rem;
+}
+
+.date-label {
+  font-size: 0.85rem;
+}
+
+.date-input-modal {
+  width: 100%;
+  padding: 15px;
+  border: 2px solid var(--border-color);
+  border-radius: 8px;
+  font-size: 1rem;
+  background: var(--bg-color);
+  color: var(--text-color);
+  cursor: pointer;
+  transition: border-color 0.3s;
+}
+
+.date-input-modal:focus {
+  border-color: var(--primary-color);
+  outline: none;
+}
+
+.checkbox-label {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  cursor: pointer;
+  margin-bottom: 10px;
+}
+
+.status-checkbox {
+  cursor: pointer;
+  width: 20px;
+  height: 20px;
+}
+
+.checkbox-text {
+  font-size: 1rem;
+  color: var(--text-color);
+}
+
+.created-date {
+  font-size: 0.9rem;
+  color: var(--text-secondary);
+  margin-top: 5px;
+}
+
+.modal-actions {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 15px;
+}
+
+.delete-modal-btn {
+  padding: 12px 20px;
+  background: rgba(244, 67, 54, 0.1);
+  color: #f44336;
+  border: 2px solid rgba(244, 67, 54, 0.3);
+  border-radius: 8px;
+  font-size: 1rem;
+  font-weight: 500;
+  transition: all 0.2s;
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+  gap: 8px;
+}
+
+.delete-modal-btn:hover {
+  background: #f44336;
+  color: white;
+  border-color: f44336;
+}
+
+.right-actions {
+  display: flex;
+  gap: 10px;
+}
+
+.cancel-modal-btn,
+.save-modal-btn {
+  padding: 12px 25px;
+  border-radius: 8px;
+  font-size: 1rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s;
+  border: none;
+}
+
+.cancel-modal-btn {
+  background: var(--border-color);
+  color: var(--text-color);
+}
+
+.cancel-modal-btn:hover {
+  background: var(--primary-color);
+  color: white;
+}
+
+.save-modal-btn {
+  background: var(--primary-color);
+  color: white;
+}
+
+.save-modal-btn:hover {
+  background: var(--primary-hover);
+  transform: translateY(-2px);
+}
+
+@media (max-width: 768px) {
+  .date-input-container {
+    flex-direction: column;
+  }
+
   .add-todo {
     flex-direction: column;
   }
-  
+
   .filters {
     flex-wrap: wrap;
   }
-  
-  .todo-content {
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 10px;
-  }
 
-  .todo-date {
-    align-self: flex-end;
+  .todo-content {
+    display: grid;
+    grid-template-columns: min-content 3fr;
+    grid-template-rows: 1fr;
+    gap: 5px;
   }
 
   .header-top {

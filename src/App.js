@@ -3,6 +3,7 @@ import TodoForm from "./components/TodoForm";
 import TodoList from "./components/TodoList";
 import Filter from "./components/Filter";
 import "./App.css"
+import EditModal from "./components/EditModal";
 
 
 function App() {
@@ -15,6 +16,8 @@ function App() {
     const savedTheme = localStorage.getItem('darkMode');
     return savedTheme ? JSON.parse(savedTheme) : false;
   });
+
+  const [editingTodo, setEditingTodo] = useState(null);
 
   //сохранение тудух в localStorage
   useEffect(() => {
@@ -31,13 +34,14 @@ function App() {
     }
   }, [darkMode]);
 
-  const addTodo = (text) => {
+  const addTodo = (text, dueDate = null) => {
     if (text.trim() !== '') {
       const newTodo = {
         id: Date.now(),
         text: text.trim(),
         completed: false,
-        createAt: new Date().toLocaleDateString()
+        createAt: new Date().toLocaleDateString('ru-RU'),
+        dueDate: dueDate
       };
       setTodos([...todos, newTodo]);
     }
@@ -45,6 +49,7 @@ function App() {
 
   const deleteTodo = (id) => {
     setTodos(todos.filter(todo => todo.id !== id));
+    setEditingTodo(null);
   };
 
   const toggleTodo = (id) => {
@@ -53,10 +58,20 @@ function App() {
     ));
   };
 
-  const editTodo = (id, newText) => {
+  const editTodo = (id, newText, newDueDate = null) => {
     setTodos(todos.map(todo =>
-      todo.id === id ? { ...todo, text: newText } : todo));
+      todo.id === id ? { ...todo, text: newText, dueDate: newDueDate !== undefined ? newDueDate : todo.dueDate } : todo));
+      setEditingTodo(null);
   };
+
+  const openEditModal = (todo) => {
+    setEditingTodo(todo);
+  }
+
+  const closeEditModal = () => {
+    setEditingTodo(null);
+  }
+
 
   const clearCompleted = () => {
     setTodos(todos.filter(todo => !todo.completed));
@@ -73,18 +88,48 @@ function App() {
     }
   }
 
+  const getSortedTodos = () => {
+    const filteredTodos = getFilteredTodos();
+
+    return filteredTodos.sort((a, b) => {
+      //если нет даты, то вниз
+      if (!a.dueDate && !b.dueDate) return 0; //если обе без даты порядок не важен
+      if (!a.dueDate) return 1; //если только у а нет даты - a идет после b
+      if (!b.dueDate) return -1; //если только у b нет даты - а идет перед b
+
+      const dateA = new Date(a.dueDate);
+      const dateB = new Date(b.dueDate)
+      const now = new Date();
+
+      //просроченные выше остальных
+      const aIsOverDue = !a.completed && dateA < now; 
+      const bIsOverDue = !b.completed && dateB < now; 
+
+      if (aIsOverDue && !bIsOverDue) return -1; // если a просрочена, b нет -> a выше
+      if (!aIsOverDue && bIsOverDue) return 1; // если a не просрочена, b просрочена -> a ниже
+
+      return dateA - dateB;
+
+    });
+  }
+
   const toggleDarkMode = () => {
     setDarkMode(!darkMode);
   }
 
   const activeTodosCount = todos.filter(todo => !todo.completed).length;
 
+
+  console.log("Editing todo:", editingTodo);
+  console.log("Is modal open?", !!editingTodo);
+
+
   return (
     <div className={`app ${darkMode ? 'dark' : ''}`}>
       <div className="container">
         <header className="header">
           <div className="header-top">
-          <h1>My Todo List</h1>
+          <h1>Список задач</h1>
           <button onClick={toggleDarkMode} className="theme-toggle-btn"
           aria-label={darkMode ? 'Переключить на светлую тему' : 'Переключить на тёмную тему'}
           >
@@ -104,11 +149,11 @@ function App() {
       />
 
       <TodoList 
-        todos={getFilteredTodos()}
+        todos={getSortedTodos()}
         filter={filter}
         onToggle={toggleTodo}
         onDelete={deleteTodo}
-        onEdit={editTodo}
+        onEdit={openEditModal}
       />  
 
       {todos.some(todo => todo.completed) && (
@@ -117,6 +162,17 @@ function App() {
         </button>
       )}
       </div>
+
+      {editingTodo && (
+        <EditModal 
+        todo={editingTodo}
+        isOpen={!!editingTodo}
+        onClose={closeEditModal}
+        onSave={editTodo}
+        onDelete={deleteTodo}
+        />
+      )}
+      
     </div>
   )
 
