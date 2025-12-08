@@ -707,13 +707,6 @@ body.dark-theme {
     flex-wrap: wrap;
   }
 
-  .todo-content {
-    display: grid;
-    grid-template-columns: min-content 3fr;
-    grid-template-rows: 1fr;
-    gap: 5px;
-  }
-
   .header-top {
     flex-direction: column;
     gap: 15px;
@@ -721,5 +714,11 @@ body.dark-theme {
 
   .header h1 {
     font-size: 2rem;
+  }
+
+  .edit-modal {
+    overflow: unset;
+    max-height: fit-content;
+    width: auto;
   }
 }
